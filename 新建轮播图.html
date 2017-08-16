@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#bor{
+			width: 952px;
+			height: 440px;
+			border: 2px black solid;
+			margin: 200px auto;
+			overflow: hidden;
+			position: relative;
+		}	
+		#bor #pic_bor{
+			width: 5712px;
+			height: 440px;
+			position: absolute
+		}
+		#bor #pic_bor img{
+			float: left;
+		}
+		#bor ul{
+			width: 585px;
+			height: 30px;
+			bottom: 0px;
+			right: 0px;
+			position: absolute
+		}
+		#bor ul li{
+			width: 116px;
+			height: 30px;
+			color: white;
+			list-style: none;
+			font-family: '宋体';
+			font-size: 12px;
+			line-height: 30px;
+			text-align: center;
+			margin-left: 1px;
+			background: black;
+			float: left;
+			opacity: 0.4;
+		}
+		#bor ul li:hover{
+			color: #c00;
+			text-decoration: underline;
+		}
+		</style>
+		
+	<script src="jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.easing.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var i = 0;//用于做标记
+			var inTimer;//将定时器设置成成员变量
+			var outTimer;
+			var isCli = true;
+			//图片轮播函数
+			function run(){
+				i++;
+				if(i==6){//如果最后一张，left属性改变成0
+					$("#bor #pic_bor").css({'left':0+'px'});
+					i=1;
+				}
+					var left = i*-952;
+					isCli = false;//轮播动画切换时不可点击
+					$("#bor #pic_bor").animate({'left':left+'px'},300,function(){
+							isCli = true;
+						});
+					if(i==5){//指示器显示问题解决
+						$("#bor ul li").eq(0).css({'opacity':'0.7'}).siblings('li').css({'opacity':'0.4'});
+					}else{
+						$("#bor ul li").eq(i).css({'opacity':'0.7'}).siblings('li').css({'opacity':'0.4'});
+					}
+			}
+			inTimer = setInterval(run,2000);
+//			li的点击的时候不让有轮播动画
+			$("#bor ul li").click(function(){
+				if(!isCli){//动画不能点击
+					return;
+				}
+				//清理定时器
+				clearTimeout(outTimer);
+				//清理定时器
+				clearInterval(inTimer);
+				//点击的时候不开启定inTimer
+				outTimer = setTimeout(function(){
+					inTimer = setInterval(run,2000);
+				},400);
+				// 标记
+				var liThis = $(this);
+				i = liThis.index();
+				var picl = i*-952; 
+				//指示器
+				$("#bor ul li").eq(i).css({'opacity':'0.7'}).siblings('li').css({'opacity':'0.4'});
+				//轮播
+				$("#bor #pic_bor").stop().animate({'left':picl+'px'},300);
+			})
+			
+		})
+	</script>
+	</head>
+	<body>
+		<div id="bor">
+			<div id="pic_bor">
+				<img src="mbb_images/img1.jpg" alt="" />
+				<img src="mbb_images/img2.jpg" alt="" />
+				<img src="mbb_images/img3.jpg" alt="" />
+				<img src="mbb_images/img4.jpg" alt="" />
+				<img src="mbb_images/img5.jpg" alt="" />
+				<img src="mbb_images/img1.jpg" alt="" />
+			</div>
+			<ul>
+					<li style="opacity: 0.7;">起舞少女</li>
+					<li>小小心机</li>
+					<li>海岛假日</li>
+					<li>星空幻想</li>
+					<li>马戏游园</li>
+			</ul>
+		</div>
+	</body>
+</html>
